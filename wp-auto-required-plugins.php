@@ -131,7 +131,7 @@ class WP_Auto_Required_Plugins {
 
 			// Filter the logging message format/text.
 			$log_msg_format = apply_filters( 'required_plugins_error_log_text',
-				__( 'Required Plugin auto-activation failed for: "%s", with message: %s', 'wds-required-plugins' ), $plugin, $result, $network );
+				__( 'Required Plugin auto-activation failed for: "%s", with message: %s', 'required-plugins' ), $plugin, $result, $network );
 
 			trigger_error( sprintf( $log_msg_format, $plugin, $result->get_error_message() ) );
 		}
@@ -147,7 +147,7 @@ class WP_Auto_Required_Plugins {
 	 * @return void
 	 */
 	public function required_text_markup() {
-		$this->required_text = apply_filters( 'required_plugins_text', sprintf( '<span style="color: #888">%s</span>', __( 'Required Plugin', 'wds-required-plugins' ) ) );
+		$this->required_text = apply_filters( 'required_plugins_text', sprintf( '<span style="color: #888">%s</span>', __( 'Required Plugin', 'required-plugins' ) ) );
 	}
 
 	/**
@@ -269,18 +269,18 @@ class WP_Auto_Required_Plugins {
 			return;
 		}
 
-		$loaded = load_plugin_textdomain( 'wds-required-plugins', false, '/languages/' );
+		$loaded = load_plugin_textdomain( 'required-plugins', false, '/languages/' );
 		if ( ! $loaded ) {
-			$loaded = load_muplugin_textdomain( 'wds-required-plugins', '/languages/' );
+			$loaded = load_muplugin_textdomain( 'required-plugins', '/languages/' );
 		}
 		if ( ! $loaded ) {
-			$loaded = load_theme_textdomain( 'wds-required-plugins', '/languages/' );
+			$loaded = load_theme_textdomain( 'required-plugins', '/languages/' );
 		}
 
 		if ( ! $loaded ) {
-			$locale = apply_filters( 'plugin_locale', get_locale(), 'wds-required-plugins' );
-			$mofile = dirname( __FILE__ ) . '/languages/wds-required-plugins-'. $locale .'.mo';
-			load_textdomain( 'wds-required-plugins', $mofile );
+			$locale = apply_filters( 'plugin_locale', get_locale(), 'required-plugins' );
+			$mofile = dirname( __FILE__ ) . '/languages/required-plugins-'. $locale .'.mo';
+			load_textdomain( 'required-plugins', $mofile );
 		}
 	}
 
