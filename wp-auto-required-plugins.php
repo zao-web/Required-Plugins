@@ -36,13 +36,19 @@ class WP_Auto_Required_Plugins {
 	 * Whether text-domain has been registered
 	 * @var boolean
 	 */
-	private static $l10n_done = false;
+	protected static $l10n_done = false;
 
 	/**
 	 * Text/markup for required text
 	 * @var string
 	 */
-	private $required_text = '';
+	protected $required_text = '';
+
+	/**
+	 * Text/markup for blacklisted text
+	 * @var string
+	 */
+	protected $blacklisted_text = '';
 
 	/**
 	 * Creates or returns an instance of this class.
@@ -62,7 +68,7 @@ class WP_Auto_Required_Plugins {
 	 *
 	 * @since 0.1.0
 	 */
-	private function __construct() {
+	protected function __construct() {
 		add_filter( 'admin_init', array( $this, 'activate_if_not' ) );
 		add_filter( 'admin_init', array( $this, 'required_text_markup' ) );
 		add_filter( 'option_active_plugins', array( $this, 'exclude_blacklisted' ) );
@@ -148,6 +154,7 @@ class WP_Auto_Required_Plugins {
 	 */
 	public function required_text_markup() {
 		$this->required_text = apply_filters( 'required_plugins_text', sprintf( '<span style="color: #888">%s</span>', __( 'Required Plugin', 'required-plugins' ) ) );
+		$this->blacklisted_text = apply_filters( 'blacklisted_plugins_text', sprintf( '<span style="color: #dc3232">%s</span>', __( 'Blacklisted Plugin', 'required-plugins' ) ) );
 	}
 
 	/**
@@ -164,12 +171,19 @@ class WP_Auto_Required_Plugins {
 	 */
 	public function filter_plugin_links( $actions = array(), $plugin ) {
 		$required_plugins = array_unique( array_merge( $this->get_required_plugins(), $this->get_network_required_plugins() ) );
+		$blacklisted_plugins = array_unique( array_merge( $this->get_blacklisted_plugins(), $this->get_network_blacklisted_plugins() ) );
+
 		// Remove deactivate link for required plugins
 		if ( array_key_exists( 'deactivate', $actions ) && in_array( $plugin, $required_plugins ) ) {
 			// Filter if you don't want the required plugin to be network-required by default.
 			if ( ! is_multisite() || apply_filters( 'wds_required_plugin_network_activate', true, $plugin ) ) {
 				$actions['deactivate'] = $this->required_text;
 			}
+		}
+
+		// Remove activate link for required plugins
+		if ( array_key_exists( 'activate', $actions ) && in_array( $plugin, $blacklisted_plugins ) ) {
+			$actions['activate'] = $this->blacklisted_text;
 		}
 
 		return $actions;
