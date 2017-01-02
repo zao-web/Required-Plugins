@@ -65,6 +65,8 @@ class WP_Auto_Required_Plugins {
 	private function __construct() {
 		add_filter( 'admin_init', array( $this, 'activate_if_not' ) );
 		add_filter( 'admin_init', array( $this, 'required_text_markup' ) );
+		add_filter( 'option_active_plugins', array( $this, 'exclude_blacklisted' ) );
+		add_filter( 'site_option_active_sitewide_plugins', array( $this, 'exclude_network_blacklisted' ) );
 
 		add_filter( 'plugin_action_links', array( $this, 'filter_plugin_links' ), 10, 2 );
 		add_filter( 'network_admin_plugin_action_links', array( $this, 'filter_plugin_links' ), 10, 2 );
@@ -174,6 +176,46 @@ class WP_Auto_Required_Plugins {
 	}
 
 	/**
+	 * Filters the 'active_plugins' option to exclude the blacklist.
+	 *
+	 * @since  0.1.5
+	 *
+	 * @param  array  $plugins Array of active plugins.
+	 *
+	 * @return array           Modified array of active plugins.
+	 */
+	public function exclude_blacklisted( $plugins ) {
+		foreach ( $this->get_blacklisted_plugins() as $plugin ) {
+			$key = array_search( $plugin, $plugins );
+			if ( false !== $key ) {
+				unset( $plugins[ $key ] );
+			}
+		}
+
+		return $plugins;
+	}
+
+	/**
+	 * Filters the 'active_sitewide_plugins' option to exclude the blacklist.
+	 *
+	 * @since  0.1.5
+	 *
+	 * @param  array  $plugins Array of active network plugins.
+	 *
+	 * @return array           Modified array of active network plugins.
+	 */
+	public function exclude_network_blacklisted( $plugins ) {
+		foreach ( $this->get_network_blacklisted_plugins() as $plugin ) {
+			$key = array_search( $plugin, $plugins );
+			if ( false !== $key ) {
+				unset( $plugins[ $key ] );
+			}
+		}
+
+		return $plugins;
+	}
+
+	/**
 	 * Get the plugins that are required for the project. Plugins will be registered by the required_plugins filter
 	 *
 	 * @since  0.1.0
@@ -193,6 +235,28 @@ class WP_Auto_Required_Plugins {
 	 */
 	public function get_network_required_plugins() {
 		return (array) apply_filters( 'network_required_plugins', array() );
+	}
+
+	/**
+	 * Get the plugins that are required for the project. Plugins will be registered by the required_plugins filter
+	 *
+	 * @since  0.1.0
+	 *
+	 * @return array
+	 */
+	public function get_blacklisted_plugins() {
+		return (array) apply_filters( 'blacklisted_plugins', array() );
+	}
+
+	/**
+	 * Get the network plugins that are blacklisted for the project. Plugins will be registered by the network_blacklisted_plugins filter
+	 *
+	 * @since  0.1.3
+	 *
+	 * @return array
+	 */
+	public function get_network_blacklisted_plugins() {
+		return (array) apply_filters( 'network_blacklisted_plugins', array() );
 	}
 
 	/**
