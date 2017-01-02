@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WDS Required Plugins v0.1.0\n"
+"Project-Id-Version: Required Plugins v0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2014-11-25 20:58:19+0000\n"
@@ -22,6 +22,6 @@ msgstr ""
 
 #: wds-required-plugins.php:85
 #@ wds-required-plugins
-msgid "WDS Required Plugin"
-msgstr "WDS Plugin Obligatorio"
+msgid "Required Plugin"
+msgstr "Plugin Obligatorio"
 

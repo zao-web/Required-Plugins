@@ -1,4 +1,4 @@
-WDS Required Plugins
+Required Plugins
 =========
 
 A library intended for mu-plugins and used in [wd_s](https://github.com/WebDevStudios/wd_s) that allows a theme or plugin to filter the list of required plugins so that:
@@ -12,10 +12,10 @@ To use, place this library in your mu-plugins/ directory (if you don't have one,
 ```php
 <?php
 
-require WPMU_PLUGIN_DIR . '/WDS-Required-Plugins/wds-required-plugins.php';
+require WPMU_PLUGIN_DIR . '/Required-Plugins/wds-required-plugins.php';
 
 /**
- * Add required plugins to WDS_Required_Plugins
+ * Add required plugins to Required_Plugins
  *
  * @param  array $required Array of required plugins in `plugin_dir/plugin_file.php` form
  *
@@ -36,7 +36,7 @@ add_filter( 'wds_required_plugins', 'wds_required_plugins_add' );
 ```
 
 #### Modification:
-To change the label from 'WDS Required Plugin', use the following filter/code.
+To change the label from 'Required Plugin', use the following filter/code.
 
 ```php
 

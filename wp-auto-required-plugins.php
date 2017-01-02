@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: WDS Required Plugins
- * Plugin URI: http://webdevstudios.com
+ * Plugin Name: Required Plugins
+ * Plugin URI: http://zao.is
  * Description: Forcefully require specific plugins to be activated.
- * Author: WebDevStudios
- * Author URI: http://webdevstudios.com
+ * Author: Zao
+ * Author URI: http://zao.is
  * Version: 0.1.4
- * Domain: wds-required-plugins
+ * Domain: required-plugins
  * License: GPLv2
  * Path: languages
  */
@@ -23,12 +23,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @subpackage Project
  */
-class WDS_Required_Plugins {
+class WP_Auto_Required_Plugins {
 
 	/**
 	 * Instance of this class.
 	 *
-	 * @var WDS_Required_Plugins object
+	 * @var WP_Auto_Required_Plugins object
 	 */
 	public static $instance = null;
 
@@ -47,7 +47,7 @@ class WDS_Required_Plugins {
 	/**
 	 * Creates or returns an instance of this class.
 	 * @since  0.1.0
-	 * @return WDS_Required_Plugins A single instance of this class.
+	 * @return WP_Auto_Required_Plugins A single instance of this class.
 	 */
 	public static function init() {
 		if ( null === self::$instance ) {
@@ -128,7 +128,7 @@ class WDS_Required_Plugins {
 		) {
 
 			// Filter the logging message format/text.
-			$log_msg_format = apply_filters( 'wds_required_plugins_error_log_text',
+			$log_msg_format = apply_filters( 'required_plugins_error_log_text',
 				__( 'Required Plugin auto-activation failed for: "%s", with message: %s', 'wds-required-plugins' ), $plugin, $result, $network );
 
 			trigger_error( sprintf( $log_msg_format, $plugin, $result->get_error_message() ) );
@@ -145,7 +145,7 @@ class WDS_Required_Plugins {
 	 * @return void
 	 */
 	public function required_text_markup() {
-		$this->required_text = apply_filters( 'wds_required_plugins_text', sprintf( '<span style="color: #888">%s</span>', __( 'WDS Required Plugin', 'wds-required-plugins' ) ) );
+		$this->required_text = apply_filters( 'required_plugins_text', sprintf( '<span style="color: #888">%s</span>', __( 'Required Plugin', 'wds-required-plugins' ) ) );
 	}
 
 	/**
@@ -174,14 +174,14 @@ class WDS_Required_Plugins {
 	}
 
 	/**
-	 * Get the plugins that are required for the project. Plugins will be registered by the wds_required_plugins filter
+	 * Get the plugins that are required for the project. Plugins will be registered by the required_plugins filter
 	 *
 	 * @since  0.1.0
 	 *
 	 * @return array
 	 */
 	public function get_required_plugins() {
-		return (array) apply_filters( 'wds_required_plugins', array() );
+		return (array) apply_filters( 'required_plugins', array() );
 	}
 
 	/**
@@ -192,7 +192,7 @@ class WDS_Required_Plugins {
 	 * @return array
 	 */
 	public function get_network_required_plugins() {
-		return (array) apply_filters( 'wds_network_required_plugins', array() );
+		return (array) apply_filters( 'network_required_plugins', array() );
 	}
 
 	/**
@@ -222,4 +222,4 @@ class WDS_Required_Plugins {
 
 }
 
-WDS_Required_Plugins::init();
+WP_Auto_Required_Plugins::init();
