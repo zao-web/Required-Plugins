@@ -5,7 +5,7 @@
  * Description: Forcefully require specific plugins to be activated.
  * Author: Zao
  * Author URI: http://zao.is
- * Version: 0.1.4
+ * Version: 0.1.6
  * Domain: required-plugins
  * License: GPLv2
  * Path: languages
@@ -77,7 +77,10 @@ class WP_Auto_Required_Plugins {
 		add_filter( 'plugin_action_links', array( $this, 'filter_plugin_links' ), 10, 2 );
 		add_filter( 'network_admin_plugin_action_links', array( $this, 'filter_plugin_links' ), 10, 2 );
 
-		// load text domain
+		// Remove plugins from the plugins page.
+		add_filter( 'all_plugins', array( $this, 'maybe_remove_plugins_from_list' ) );
+
+		// Load text domain.
 		add_action( 'plugins_loaded', array( $this, 'l10n' ) );
 	}
 
@@ -150,7 +153,7 @@ class WP_Auto_Required_Plugins {
 	 *
 	 * @since  0.1.0
 	 *
-	 * @return void
+	 * @return  void
 	 */
 	public function required_text_markup() {
 		$this->required_text = apply_filters( 'required_plugins_text', sprintf( '<span style="color: #888">%s</span>', __( 'Required Plugin', 'required-plugins' ) ) );
@@ -162,10 +165,8 @@ class WP_Auto_Required_Plugins {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param $actions
-	 * @param $plugin
-	 * @param $plugin_data
-	 * @param $context
+	 * @param array  $actions Array of actions avaible.
+	 * @param string $plugin  Slug of plugin.
 	 *
 	 * @return array
 	 */
@@ -187,6 +188,33 @@ class WP_Auto_Required_Plugins {
 		}
 
 		return $actions;
+	}
+
+	/**
+	 * Remove required plugins from the plugins list, if enabled.
+	 *
+	 * @since   0.1.6
+	 *
+	 * @param   array $plugins Array of plugins.
+	 *
+	 * @return  array          Array of plugins.
+	 */
+	public function maybe_remove_plugins_from_list( $plugins ) {
+
+		// Allow for removing all plugins from the plugins list.
+		if ( ! apply_filters( 'required_plugin_remove_from_list', false ) ) {
+			return $plugins;
+		}
+
+		// Loop through each of our required plugins.
+		foreach ( $this->get_required_plugins() as $required_plugin ) {
+
+			// Remove from the all plugins list.
+			unset( $plugins[ $required_plugin ] );
+		}
+
+		// Send it back.
+		return $plugins;
 	}
 
 	/**
@@ -278,7 +306,8 @@ class WP_Auto_Required_Plugins {
 	 * @since  0.2.1
 	 */
 	public function l10n() {
-		// Only do this one time
+
+		// Only do this one time.
 		if ( self::$l10n_done ) {
 			return;
 		}

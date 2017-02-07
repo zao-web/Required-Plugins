@@ -59,7 +59,16 @@ function change_wds_required_plugins_text( $label ) {
 add_filter( 'wds_required_plugins_text', 'change_wds_required_plugins_text' );
 ```
 
+##### Hide from the Plugin list
+To hide your required plugins from the plugins list, use the following filter/code.
+
+```php
+add_filter( 'required_plugin_remove_from_list', '__return_true' );
+```
+
 #### Changelog
+* 0.1.6
+	* Add ability to remove plugins from the plugin list, if desired.
 * 0.1.5
 	* New filters for blacklisting plugins, `'blacklisted_plugins'` and `'network_blacklisted_plugins'`.
 * 0.1.4
