@@ -33,12 +33,6 @@ class WP_Auto_Required_Plugins {
 	public static $instance = null;
 
 	/**
-	 * Whether text-domain has been registered
-	 * @var boolean
-	 */
-	protected static $l10n_done = false;
-
-	/**
 	 * Text/markup for required text
 	 * @var string
 	 */
@@ -306,16 +300,19 @@ class WP_Auto_Required_Plugins {
 	 * @since  0.2.1
 	 */
 	public function l10n() {
+		static $l10n_done = false;
 
 		// Only do this one time.
-		if ( self::$l10n_done ) {
+		if ( $l10n_done ) {
 			return;
 		}
 
 		$loaded = load_plugin_textdomain( 'required-plugins', false, '/languages/' );
+
 		if ( ! $loaded ) {
 			$loaded = load_muplugin_textdomain( 'required-plugins', '/languages/' );
 		}
+
 		if ( ! $loaded ) {
 			$loaded = load_theme_textdomain( 'required-plugins', '/languages/' );
 		}
@@ -325,6 +322,8 @@ class WP_Auto_Required_Plugins {
 			$mofile = dirname( __FILE__ ) . '/languages/required-plugins-'. $locale .'.mo';
 			load_textdomain( 'required-plugins', $mofile );
 		}
+
+		$l10n_done = true;
 	}
 
 }
