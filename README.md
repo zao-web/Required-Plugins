@@ -38,6 +38,8 @@ add_filter( 'wds_required_plugins', 'wds_required_plugins_add' );
 ```
 
 #### Modification:
+
+##### Change label
 To change the label from 'Required Plugin', use the following filter/code.
 
 ```php
@@ -68,7 +70,7 @@ add_filter( 'required_plugin_remove_from_list', '__return_true' );
 
 #### Changelog
 * 0.1.6
-	* Add ability to remove plugins from the plugin list, if desired.
+	* Add ability to remove plugins from the plugin list, if desired. ([@bradp](https://github.com/WebDevStudios/WDS-Required-Plugins/commit/40bed54d8bf714eca65ebdf54b4e4c32e8a13ee0))
 * 0.1.5
 	* New filters for blacklisting plugins, `'blacklisted_plugins'` and `'network_blacklisted_plugins'`.
 * 0.1.4
